@@ -7,7 +7,7 @@ cd lwjgl3
 
 git apply --reject --whitespace=fix ../lwjgl3_droid_syscall.diff || echo "git apply failed (universal patch set)"
 
-export ANTFLAGS="-Dplatform.linux=true -Dbinding.nfd=false -Dbinding.jawt=false -Dbinding.remotery=false -Dbinding.zstd=false"
+export ANTFLAGS="-Dplatform.linux=true -Dbinding.nfd=false -Dbinding.jawt=false -Dbinding.remotery=false"
 
 ant $ANTFLAGS compile-templates compile
 

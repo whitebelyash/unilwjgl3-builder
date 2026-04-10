@@ -1,0 +1,30 @@
+name: Android build
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: set up JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 8
+
+    - name: Build for Android
+      run: |
+        export JAVA8_HOME=$JAVA_HOME_8_${{runner.arch}}
+        bash ci_build_all.bash
+
+    - name: Upload modules release output
+      uses: actions/upload-artifact@v4
+      with:
+        name: lwjgl3-android-modules
+        path: lwjgl3/bin/RELEASE

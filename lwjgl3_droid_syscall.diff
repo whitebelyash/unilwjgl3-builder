@@ -1,0 +1,69 @@
+diff --git a/modules/lwjgl/core/src/generated/c/linux/org_lwjgl_system_linux_UIO.c b/modules/lwjgl/core/src/generated/c/linux/org_lwjgl_system_linux_UIO.c
+index f328ca6..5c29d71 100644
+--- a/modules/lwjgl/core/src/generated/c/linux/org_lwjgl_system_linux_UIO.c
++++ b/modules/lwjgl/core/src/generated/c/linux/org_lwjgl_system_linux_UIO.c
+@@ -5,6 +5,7 @@
+  */
+ #include "common_tools.h"
+ #include <sys/uio.h>
++#include "droid_uio.h"
+ #include <errno.h>
+ 
+ EXTERN_C_ENTER
+diff --git a/modules/lwjgl/core/src/templates/kotlin/core/linux/templates/uio.kt b/modules/lwjgl/core/src/templates/kotlin/core/linux/templates/uio.kt
+index 87d339f..19b448d 100644
+--- a/modules/lwjgl/core/src/templates/kotlin/core/linux/templates/uio.kt
++++ b/modules/lwjgl/core/src/templates/kotlin/core/linux/templates/uio.kt
+@@ -10,6 +10,7 @@ import org.lwjgl.generator.*
+ val uio = "UIO".nativeClass(Module.CORE_LINUX, nativeSubPath = "linux") {
+     nativeImport(
+         "<sys/uio.h>",
++        "droid_uio.h",
+         "<errno.h>"
+     )
+     // TODO:
+@@ -108,4 +109,4 @@ val uio = "UIO".nativeClass(Module.CORE_LINUX, nativeSubPath = "linux") {
+         unsigned_long_int("__riovcnt"),
+         unsigned_long_int("__flags")
+     )
+-}
+\ No newline at end of file
++}
+diff --git a/modules/lwjgl/core/src/main/c/droid_uio.h b/modules/lwjgl/core/src/main/c/droid_uio.h
+new file mode 100644
+index 0000000..59a2c8a
+--- /dev/null
++++ b/modules/lwjgl/core/src/main/c/droid_uio.h
+@@ -0,0 +1,32 @@
++#include <unistd.h>
++#include <errno.h>
++#include <sys/uio.h>
++#include <sys/syscall.h>
++
++inline ssize_t process_vm_readv (pid_t pid, const struct iovec *local_iov,
++		  unsigned long int liovcnt,
++		  const struct iovec *remote_iov,
++		  unsigned long int riovcnt, unsigned long int flags) {
++  return syscall(__NR_process_vm_readv, pid, local_iov,
++			      liovcnt, remote_iov, riovcnt, flags);
++}
++
++
++inline ssize_t process_vm_writev (pid_t pid, const struct iovec *local_iov,
++		   unsigned long int liovcnt,
++		   const struct iovec *remote_iov,
++		   unsigned long int riovcnt, unsigned long int flags) {
++  return syscall(__NR_process_vm_writev, pid, local_iov,
++			      liovcnt, remote_iov, riovcnt, flags);
++}
++
++inline ssize_t preadv(int fd, const struct iovec *iov, int iovcnt,
++                       off_t offset) {
++  return syscall(__NR_preadv, fd, iov, iovcnt, offset);
++}
++
++
++inline ssize_t pwritev(int fd, const struct iovec *iov, int iovcnt,
++                       off_t offset) {
++  return syscall(__NR_pwritev, fd, iov, iovcnt, offset);
++}

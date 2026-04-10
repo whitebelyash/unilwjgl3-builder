@@ -57,4 +57,4 @@ export CFLAGS="-D__ANDROID__"
 if [ "$LWJGL_BUILD_ARCH" == "arm32" ]; then
    export CFLAGS+=" -march=armv7-a"
 fi
-ant $ANTFLAGS -Dlinux.triplet=$TRIPLET compile-native
+ant $ANTFLAGS -Dlinux.triplet=$TRIPLET -Dbuild.offline=true compile-native

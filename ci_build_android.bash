@@ -2,13 +2,13 @@
 set -e
 
 if   [ "$LWJGL_BUILD_ARCH" == "arm64" ]; then
-  export TOOLCHAIN=arm64 TRIPLET=aarch64-linux-android
+  export TOOLCHAIN=arm64 TRIPLET=aarch64-linux-android FFI_SUFFIX=64
 elif [ "$LWJGL_BUILD_ARCH" == "arm32" ]; then
   export TOOLCHAIN=arm TRIPLET=arm-linux-androideabi
 elif [ "$LWJGL_BUILD_ARCH" == "x86" ]; then
   export TOOLCHAIN=x86 TRIPLET=i686-linux-android
 elif [ "$LWJGL_BUILD_ARCH" == "x64" ]; then
-  export TOOLCHAIN=x86_64 TRIPLET=x86_64-linux-android
+  export TOOLCHAIN=x86_64 TRIPLET=x86_64-linux-android FFI_SUFFIX=64
 fi
 
 export TOOLCHAIN_PATH=/tmp/toolchain-$TOOLCHAIN
@@ -26,5 +26,29 @@ rm sysroot/usr/lib/libstdc++.so
 popd
 
 export PATH=$TOOLCHAIN_PATH/bin:$PATH
+
+LWJGL_NATIVE=bin/libs/native/linux/$LWJGL_BUILD_ARCH/org/lwjgl
+mkdir -p $LWJGL_NATIVE
+
+if [ "$SKIP_LIBFFI" != "1" ]; then
+  export LIBFFI_PREFIX=/tmp/ffi-$TOOLCHAIN
+
+  # Get libffi
+  if [ ! -d libffi ]; then
+    wget https://github.com/libffi/libffi/releases/download/v$LIBFFI_VERSION/libffi-$LIBFFI_VERSION.tar.gz
+    tar xvf libffi-$LIBFFI_VERSION.tar.gz
+    mv libffi-$LIBFFI_VERSION libffi
+  fi
+  pushd libffi
+
+  # Build libffi
+  bash configure --host=$TRIPLET --prefix=$LIBFFI_PREFIX
+  make -j4
+
+  popd
+
+  # Copy libffi
+  cp $LIBFFI_PREFIX/lib$FFI_SUFFIX/libffi.a $LWJGL_NATIVE/
+fi
 
 ant $ANTFLAGS -Dlinux.triplet=$TRIPLET compile-native

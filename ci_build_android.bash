@@ -58,3 +58,8 @@ if [ "$LWJGL_BUILD_ARCH" == "arm32" ]; then
    export CFLAGS+=" -march=armv7-a"
 fi
 ant $ANTFLAGS -Dlinux.triplet=$TRIPLET -Dbuild.offline=true compile-native
+
+pushd bin
+   echo "Stripping native libs..."
+   find -name "*.so" | xargs -I {} $TRIPLET-objcopy --only-keep-debug {} ../debuginfo/$(basename {}).debug && $TRIPLET-strip {}
+popd

@@ -11,6 +11,8 @@ export ANTFLAGS="-Dplatform.linux=true -Dbinding.nfd=false -Dbinding.jawt=false 
 
 ant $ANTFLAGS compile-templates compile
 
+mkdir debuginfo
+
 LWJGL_BUILD_ARCH=arm64 bash ../ci_build_android.bash
 LWJGL_BUILD_ARCH=arm32 bash ../ci_build_android.bash
 LWJGL_BUILD_ARCH=x86 bash ../ci_build_android.bash

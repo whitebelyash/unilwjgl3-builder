@@ -53,4 +53,8 @@ if [ "$SKIP_LIBFFI" != "1" ]; then
   cp $LIBFFI_PREFIX/lib$FFI_SUFFIX/libffi.a $LWJGL_NATIVE/
 fi
 
+export CFLAGS="-D__ANDROID__ -D__USE_LARGEFILE64"
+if [ "$LWJGL_BUILD_ARCH" == "arm32" ]; then
+   export CFLAGS+=" -march=armv7-a"
+fi
 ant $ANTFLAGS -Dlinux.triplet=$TRIPLET compile-native

@@ -67,3 +67,23 @@ index 0000000..59a2c8a
 +                       off_t offset) {
 +  return syscall(__NR_pwritev, fd, iov, iovcnt, offset);
 +}
+diff --git a/config/linux/build.xml b/config/linux/build.xml
+index 7108ff7..ac7a388 100644
+--- a/config/linux/build.xml
++++ b/config/linux/build.xml
+@@ -45,7 +45,7 @@
+                 <arg line="-O3 -flto=auto -fPIC @{flags} -pthread -DNDEBUG -DLWJGL_LINUX -DLWJGL_${build.arch}"/>
+                 <arg line="-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -D_GNU_SOURCE"/>
+                 <arg line="-D_FILE_OFFSET_BITS=64"/>
+-
++		<arg line="${env.CFLAGS}" if:set="env.CFLAGS"/>
+                 <arg value="-I${jni.headers}"/>
+                 <arg value="-I${jni.headers}/linux"/>
+ 
+@@ -480,4 +480,4 @@
+             <touch file="${lib.native}/touch.txt" verbose="false"/>
+         </sequential>
+     </target>
+-</project>
+\ No newline at end of file
++</project>

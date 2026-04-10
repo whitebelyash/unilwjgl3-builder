@@ -45,6 +45,7 @@ if [ "$SKIP_LIBFFI" != "1" ]; then
   # Build libffi
   bash configure --host=$TRIPLET --prefix=$LIBFFI_PREFIX
   make -j4
+  make install
 
   popd
 

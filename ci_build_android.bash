@@ -32,6 +32,7 @@ mkdir -p $LWJGL_NATIVE
 
 if [ "$SKIP_LIBFFI" != "1" ]; then
   export LIBFFI_PREFIX=/tmp/ffi-$TOOLCHAIN
+  export LIBFFI_VERSION=3.5.2
 
   # Get libffi
   if [ ! -d libffi ]; then

@@ -12,6 +12,16 @@ if [ -z "$LIBFFI_VERSION" ]; then
    exit 1
 fi
 
+mkdir lib
+pushd lib
+wget -nc -nv https://repo1.maven.org/maven2/org/openjdk/nashorn/nashorn-core/15.7/nashorn-core-15.7.jar
+wget -nc -nv https://repo1.maven.org/maven2/org/ow2/asm/asm/7.3.1/asm-7.3.1.jar
+wget -nc -nv https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/7.3.1/asm-commons-7.3.1.jar
+wget -nc -nv https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/7.3.1/asm-tree-7.3.1.jar
+wget -nc -nv https://repo1.maven.org/maven2/org/ow2/asm/asm-util/7.3.1/asm-util-7.3.1.jar
+export NASHORN=$(pwd)
+popd
+
 git clone --depth 1 --branch $LWJGL_VERSION https://github.com/LWJGL/lwjgl3
 cd lwjgl3
 
@@ -21,7 +31,7 @@ if [ -f "./modules/lwjgl/core/src/templates/kotlin/core/linux/templates/uio.kt" 
    git apply --reject --whitespace=fix ../lwjgl3_droid_syscall.diff || echo "git apply failed (droid_uio syscall patch)"
 fi
 
-export ANTFLAGS="-Dplatform.linux=true -Dbinding.nfd=false -Dbinding.jawt=false -Dbinding.remotery=false -Dbinding.zstd=false"
+export ANTFLAGS="-lib $NASHORN -Dplatform.linux=true -Dbinding.nfd=false -Dbinding.jawt=false -Dbinding.remotery=false -Dbinding.zstd=false"
 
 ant $ANTFLAGS compile-templates compile
 

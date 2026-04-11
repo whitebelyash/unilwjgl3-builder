@@ -11,12 +11,10 @@ index 7108ff7..e18f435 100644
                  <arg value="-I${module.lwjgl.rel}/core/src/main/c"/>
                  <arg value="-I${module.lwjgl.rel}/core/src/main/c/${platform}"/>
  
-@@ -131,7 +131,7 @@
+@@ -131,6 +131,6 @@
                  <arg value="-shared"/>
                  <arg value="-m64" if:set="build.arch.x64"/>
                  <arg value="-m32" if:set="build.arch.x86"/>
 -
 +		<arg line="${env.LDFLAGS}" if:set="env.LDFLAGS"/>
                  <arg line="-z noexecstack"/>
-                 <arg line="-O3 -flto=auto -fPIC -pthread -o ${lib.arch}/lib${name}.so"/>
- 

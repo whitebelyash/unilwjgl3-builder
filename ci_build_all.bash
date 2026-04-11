@@ -2,12 +2,12 @@
 
 set -e
 
-if [ -n "$LWJGL_VERSION" ]; then
+if [ -z "$LWJGL_VERSION" ]; then
    echo "LWJGL version not set"
    exit 1
 fi
 
-if [ -n "$LIBFFI_VERSION" ]; then
+if [ -z "$LIBFFI_VERSION" ]; then
    echo "libffi version not set"
    exit 1
 fi

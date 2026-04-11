@@ -38,9 +38,3 @@ jobs:
       with:
         name: lwjgl3-${{matrix.version}}-android-modules
         path: lwjgl3/bin/RELEASE
-
-   - name: Upload debug symbols
-      uses: actions/upload-artifact@v4
-      with:
-        name: lwjgl3-android-debuginfo
-        path: lwjgl3/debuginfo

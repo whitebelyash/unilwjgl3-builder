@@ -1,0 +1,22 @@
+diff --git a/config/linux/build.xml b/config/linux/build.xml
+index 7108ff7..e18f435 100644
+--- a/config/linux/build.xml
++++ b/config/linux/build.xml
+@@ -48,7 +48,7 @@
+ 
+                 <arg value="-I${jni.headers}"/>
+                 <arg value="-I${jni.headers}/linux"/>
+-
++                <arg line="${env.CFLAGS}" if:set="env.CFLAGS"/>
+                 <arg value="-I${module.lwjgl.rel}/core/src/main/c"/>
+                 <arg value="-I${module.lwjgl.rel}/core/src/main/c/${platform}"/>
+ 
+@@ -131,7 +131,7 @@
+                 <arg value="-shared"/>
+                 <arg value="-m64" if:set="build.arch.x64"/>
+                 <arg value="-m32" if:set="build.arch.x86"/>
+-
++		<arg line="${env.LDFLAGS}" if:set="env.LDFLAGS"/>
+                 <arg line="-z noexecstack"/>
+                 <arg line="-O3 -flto=auto -fPIC -pthread -o ${lib.arch}/lib${name}.so"/>
+ 

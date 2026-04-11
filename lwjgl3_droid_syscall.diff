@@ -1,15 +1,3 @@
-diff --git a/modules/lwjgl/core/src/generated/c/linux/org_lwjgl_system_linux_UIO.c b/modules/lwjgl/core/src/generated/c/linux/org_lwjgl_system_linux_UIO.c
-index f328ca6..5c29d71 100644
---- a/modules/lwjgl/core/src/generated/c/linux/org_lwjgl_system_linux_UIO.c
-+++ b/modules/lwjgl/core/src/generated/c/linux/org_lwjgl_system_linux_UIO.c
-@@ -5,6 +5,7 @@
-  */
- #include "common_tools.h"
- #include <sys/uio.h>
-+#include "droid_uio.h"
- #include <errno.h>
- 
- EXTERN_C_ENTER
 diff --git a/modules/lwjgl/core/src/templates/kotlin/core/linux/templates/uio.kt b/modules/lwjgl/core/src/templates/kotlin/core/linux/templates/uio.kt
 index 87d339f..19b448d 100644
 --- a/modules/lwjgl/core/src/templates/kotlin/core/linux/templates/uio.kt
@@ -22,13 +10,6 @@ index 87d339f..19b448d 100644
          "<errno.h>"
      )
      // TODO:
-@@ -108,4 +109,4 @@ val uio = "UIO".nativeClass(Module.CORE_LINUX, nativeSubPath = "linux") {
-         unsigned_long_int("__riovcnt"),
-         unsigned_long_int("__flags")
-     )
--}
-\ No newline at end of file
-+}
 diff --git a/modules/lwjgl/core/src/main/c/droid_uio.h b/modules/lwjgl/core/src/main/c/droid_uio.h
 new file mode 100644
 index 0000000..59a2c8a
@@ -67,23 +48,4 @@ index 0000000..59a2c8a
 +                       off_t offset) {
 +  return syscall(__NR_pwritev, fd, iov, iovcnt, offset);
 +}
-diff --git a/config/linux/build.xml b/config/linux/build.xml
-index 7108ff7..ac7a388 100644
---- a/config/linux/build.xml
-+++ b/config/linux/build.xml
-@@ -45,7 +45,7 @@
-                 <arg line="-O3 -flto=auto -fPIC @{flags} -pthread -DNDEBUG -DLWJGL_LINUX -DLWJGL_${build.arch}"/>
-                 <arg line="-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0 -D_GNU_SOURCE"/>
-                 <arg line="-D_FILE_OFFSET_BITS=64"/>
--
-+		<arg line="${env.CFLAGS}" if:set="env.CFLAGS"/>
-                 <arg value="-I${jni.headers}"/>
-                 <arg value="-I${jni.headers}/linux"/>
- 
-@@ -480,4 +480,4 @@
-             <touch file="${lib.native}/touch.txt" verbose="false"/>
-         </sequential>
-     </target>
--</project>
-\ No newline at end of file
-+</project>
+

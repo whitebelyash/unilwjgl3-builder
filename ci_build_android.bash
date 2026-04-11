@@ -32,7 +32,6 @@ mkdir -p $LWJGL_NATIVE
 
 if [ "$SKIP_LIBFFI" != "1" ]; then
   export LIBFFI_PREFIX=/tmp/ffi-$TOOLCHAIN
-  export LIBFFI_VERSION=3.5.2
 
   # Get libffi
   if [ ! -d libffi ]; then
@@ -57,9 +56,9 @@ export CFLAGS="-D__ANDROID__"
 if [ "$LWJGL_BUILD_ARCH" == "arm32" ]; then
    export CFLAGS+=" -march=armv7-a"
 fi
-ant $ANTFLAGS -Dlinux.triplet=$TRIPLET -Dbuild.offline=true compile-native
+ant $ANTFLAGS -Dlinux.triplet=$TRIPLET -Dgcc.prefix=$TRIPLET- -Dbuild.offline=true compile-native
 
-pushd bin
-   echo "Stripping native libs..."
-   find -name "*.so" | xargs -I {} $TRIPLET-objcopy --only-keep-debug {} ../debuginfo/$(basename {}).debug && $TRIPLET-strip {}
-popd
+#pushd bin
+#   echo "Stripping native libs..."
+#   find -name "*.so" | xargs -I {} $TRIPLET-objcopy --only-keep-debug {} ../debuginfo/$(basename {}).debug && $TRIPLET-strip {}
+#popd

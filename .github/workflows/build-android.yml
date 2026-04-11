@@ -5,6 +5,8 @@ on: [push, workflow_dispatch]
 jobs:
   build:
     strategy:
+      matrix:
+        version: [ "3.2.3", "3.4.1" ]
       fail-fast: false
 
     runs-on: ubuntu-latest
@@ -27,10 +29,18 @@ jobs:
     - name: Build for Android
       run: |
         export JAVA8_HOME=$JAVA_HOME_8_${{runner.arch}}
+        export LWJGL_VERSION=${{matrix.version}}
+        export LIBFFI_VERSION=3.5.2
         bash ci_build_all.bash
 
     - name: Upload modules release output
       uses: actions/upload-artifact@v4
       with:
-        name: lwjgl3-android-modules
+        name: lwjgl3-${{matrix.version}}-android-modules
         path: lwjgl3/bin/RELEASE
+
+   - name: Upload debug symbols
+      uses: actions/upload-artifact@v4
+      with:
+        name: lwjgl3-android-debuginfo
+        path: lwjgl3/debuginfo

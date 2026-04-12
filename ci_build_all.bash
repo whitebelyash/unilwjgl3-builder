@@ -31,16 +31,23 @@ popd
 git clone --depth 1 --branch $LWJGL_VERSION https://github.com/LWJGL/lwjgl3
 cd lwjgl3
 
-git apply --reject --whitespace=fix ../lwjgl3_uni_cflags_ldflags.diff || echo "git apply failed (universal build system patch)"
+apply_patch() {
+   git apply --reject --whitespace=fix ../$1.diff || (echo "git apply failed ($2)" && exit 1)
+}
+
+apply_patch lwjgl3_uni_cflags_ldflags "CFLAGS/LDFLAGS support"
 
 if [ -f "./modules/lwjgl/core/src/templates/kotlin/core/linux/templates/uio.kt" ]; then
-   git apply --reject --whitespace=fix ../lwjgl3_droid_syscall.diff || echo "git apply failed (droid_uio syscall patch)"
+   apply_patch lwjgl3_droid_syscall "UIO system call support"
 fi
 
 if [ -f "./modules/lwjgl/core/src/main/c/linux/LinuxLWJGL.h" ]; then
-   git apply --reject --whitespace=fix ../lwjgl3_remove_x11_hdr.diff || echo "git apply failed (remove LinuxLWJGL.h)"
+   apply_patch lwjgl3_remove_x11_hdr "remove unused X11 headers"
 fi
 
+if [[ "$LWJGL_VERSION" == "3.3.1" ]]; then
+   apply_patch lwjgl3_xxhash_static_assert "fix static assert macro in xxHash"
+fi
 
 export ANTFLAGS="-lib $NASHORN -Dplatform.linux=true -Dbinding.nfd=false -Dbinding.jawt=false -Dbinding.remotery=false -Dbinding.zstd=false -Dbinding.rpmalloc=false -Dbinding.yoga=false -Dbinding.meow=false"
 

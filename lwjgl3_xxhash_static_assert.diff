@@ -1,0 +1,19 @@
+diff --git a/modules/lwjgl/xxhash/src/main/c/xxhash.h b/modules/lwjgl/xxhash/src/main/c/xxhash.h
+index 5808a9e..480f4b8 100644
+--- a/modules/lwjgl/xxhash/src/main/c/xxhash.h
++++ b/modules/lwjgl/xxhash/src/main/c/xxhash.h
+@@ -1547,11 +1547,10 @@ static void* XXH_memcpy(void* dest, const void* src, size_t size)
+ 
+ /* note: use after variable declarations */
+ #ifndef XXH_STATIC_ASSERT
+-#  if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)    /* C11 */
+-#    include <assert.h>
+-#    define XXH_STATIC_ASSERT_WITH_MESSAGE(c,m) do { static_assert((c),m); } while(0)
+-#  elif defined(__cplusplus) && (__cplusplus >= 201103L)            /* C++11 */
++#  if defined(__cplusplus) && (__cplusplus >= 201103L)            /* C++11 */
+ #    define XXH_STATIC_ASSERT_WITH_MESSAGE(c,m) do { static_assert((c),m); } while(0)
++#  elif defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)    /* C11 */
++#    define XXH_STATIC_ASSERT_WITH_MESSAGE(c,m) do { _Static_assert((c),m); } while(0)
+ #  else
+ #    define XXH_STATIC_ASSERT_WITH_MESSAGE(c,m) do { struct xxh_sa { char x[(c) ? 1 : -1]; }; } while(0)
+ #  endif

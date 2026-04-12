@@ -46,7 +46,8 @@ if [ -f "./modules/lwjgl/core/src/main/c/linux/LinuxLWJGL.h" ]; then
 fi
 
 if [[ "$LWJGL_VERSION" == "3.3.1" ]]; then
-   apply_patch lwjgl3_xxhash_static_assert "fix static assert macro in xxHash"
+   apply_patch lwjgl3_3.3.1_xxhash_static_assert "fix static assert macro in xxHash"
+   apply_patch lwjgl3_3.3.1_uring_type "add missing type into ui_uring.h"
 fi
 
 export ANTFLAGS="-lib $NASHORN -Dplatform.linux=true -Dbinding.nfd=false -Dbinding.jawt=false -Dbinding.remotery=false -Dbinding.zstd=false -Dbinding.rpmalloc=false -Dbinding.yoga=false -Dbinding.meow=false"

@@ -1,0 +1,13 @@
+diff --git a/modules/lwjgl/core/src/main/c/linux/liburing/include/liburing/io_uring.h b/modules/lwjgl/core/src/main/c/linux/liburing/include/liburing/io_uring.h
+index a7d193d..4368627 100644
+--- a/modules/lwjgl/core/src/main/c/linux/liburing/include/liburing/io_uring.h
++++ b/modules/lwjgl/core/src/main/c/linux/liburing/include/liburing/io_uring.h
+@@ -15,6 +15,8 @@
+ extern "C" {
+ #endif
+ 
++typedef int __kernel_rwf_t;
++
+ /*
+  * IO submission data structure (Submission Queue Entry)
+  */

@@ -31,7 +31,12 @@ if [ -f "./modules/lwjgl/core/src/templates/kotlin/core/linux/templates/uio.kt" 
    git apply --reject --whitespace=fix ../lwjgl3_droid_syscall.diff || echo "git apply failed (droid_uio syscall patch)"
 fi
 
-export ANTFLAGS="-lib $NASHORN -Dplatform.linux=true -Dbinding.nfd=false -Dbinding.jawt=false -Dbinding.remotery=false -Dbinding.zstd=false"
+if [ -f "./modules/lwjgl/core/src/main/c/linux/LinuxLWJGL.h" ]; then
+   git apply --reject --whitespace=fix ../lwjgl3_remove_x11_hdr.diff || echo "git apply failed (remove LinuxLWJGL.h)"
+fi
+
+
+export ANTFLAGS="-lib $NASHORN -Dplatform.linux=true -Dbinding.nfd=false -Dbinding.jawt=false -Dbinding.remotery=false -Dbinding.zstd=false -Dbinding.rpmalloc=false -Dbinding.yoga=false -Dbinding.meow=false"
 
 ant $ANTFLAGS compile-templates compile
 

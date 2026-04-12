@@ -28,12 +28,12 @@ jobs:
         distribution: temurin
         java-version: 17
 
-    - name: set up JDK 25
+    - name: set up JDK 21
       if: ${{ steps.setup_jdk17.outcome == 'skipped' }}
       uses: actions/setup-java@v3
       with:
         distribution: temurin
-        java-version: 25
+        java-version: 21
 
 
     - name: Build for Android

@@ -52,6 +52,25 @@ if [ "$SKIP_LIBFFI" != "1" ]; then
   cp $LIBFFI_PREFIX/lib$FFI_SUFFIX/libffi.a $LWJGL_NATIVE/
 fi
 
+if [ "$SKIP_DYNCALL" != "1" ]; then
+  if [ ! -d dyncall ]; then
+     git clone --depth 1 https://github.com/LWJGL-CI/dyncall/
+  fi
+  pushd dyncall
+  mkdir build
+  pushd build
+
+  cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=$TRIPLET-gcc -DCMAKE_CXX_COMPILER=$TRIPLET-g++ -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ..
+  cmake --build .
+
+  cp dyncall/libdyncall_s.a $LWJGL_NATIVE/
+  cp dyncallback/libdyncallback_s.a $LWJGL_NATIVE/
+  cp dynload/libdynload_s.a $LWJGL_NATIVE/
+
+  popd
+  popd
+fi
+
 export CFLAGS="-D__ANDROID__"
 if [ "$LWJGL_BUILD_ARCH" == "arm32" ]; then
    export CFLAGS+=" -march=armv7-a"

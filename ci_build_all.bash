@@ -12,6 +12,12 @@ if [ -z "$LIBFFI_VERSION" ]; then
    exit 1
 fi
 
+if [[ "$LWJGL_VERSION" == "3.2.3" ]]; then
+   export SKIP_LIBFFI=1
+else
+   export SKIP_DYNCALL=1
+fi
+
 mkdir lib
 pushd lib
 wget -nc -nv https://repo1.maven.org/maven2/org/openjdk/nashorn/nashorn-core/15.7/nashorn-core-15.7.jar

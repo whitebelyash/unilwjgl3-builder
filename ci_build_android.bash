@@ -74,7 +74,7 @@ if [ "$SKIP_DYNCALL" != "1" ]; then
 
 fi
 
-export CFLAGS="-D__ANDROID__ -Wno-error"
+export CFLAGS="-D__ANDROID__ -Wno-error -Werror=implicit-function-declaration"
 if [ "$LWJGL_BUILD_ARCH" == "arm32" ]; then
    export CFLAGS+=" -march=armv7-a"
 fi

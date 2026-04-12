@@ -10,10 +10,10 @@ index 87d339f..19b448d 100644
      )
 diff --git a/modules/lwjgl/core/src/main/c/droid_uio.h b/modules/lwjgl/core/src/main/c/droid_uio.h
 new file mode 100644
-index 0000000..59a2c8a
+index 0000000..783d34f
 --- /dev/null
 +++ b/modules/lwjgl/core/src/main/c/droid_uio.h
-@@ -0,0 +1,32 @@
+@@ -0,0 +1,44 @@
 +#include <unistd.h>
 +#include <errno.h>
 +#include <sys/uio.h>
@@ -46,4 +46,15 @@ index 0000000..59a2c8a
 +                       off_t offset) {
 +  return syscall(__NR_pwritev, fd, iov, iovcnt, offset);
 +}
-
++
++// TODO: wrap these correctly
++inline ssize_t preadv2(int fd, const struct iovec *iov, int iovcnt,
++                       off_t offset, int flags) {
++  errno = ENOSYS;
++  return -1;
++}
++inline ssize_t pwritev2(int fd, const struct iovec *iov, int iovcnt,
++                       off_t offset, int flags) {
++  errno = ENOSYS;
++  return -1;
++}

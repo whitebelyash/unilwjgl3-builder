@@ -57,18 +57,21 @@ if [ "$SKIP_DYNCALL" != "1" ]; then
      git clone --depth 1 https://github.com/LWJGL-CI/dyncall/
   fi
   pushd dyncall
-  mkdir build
-  pushd build
+  mkdir build-$LWJGL_BUILD_ARCH
+  pushd build-$LWJGL_BUILD_ARCH
+
+  export DYNCALL_BUILD=$(pwd)
 
   cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=$TRIPLET-gcc -DCMAKE_CXX_COMPILER=$TRIPLET-g++ -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ..
   cmake --build .
 
-  cp dyncall/libdyncall_s.a $LWJGL_NATIVE/
-  cp dyncallback/libdyncallback_s.a $LWJGL_NATIVE/
-  cp dynload/libdynload_s.a $LWJGL_NATIVE/
+  popd
+  popd
 
-  popd
-  popd
+  cp $DYNCALL_BUILD/dyncall/libdyncall_s.a $LWJGL_NATIVE/
+  cp $DYNCALL_BUILD/dyncallback/libdyncallback_s.a $LWJGL_NATIVE/
+  cp $DYNCALL_BUILD/dynload/libdynload_s.a $LWJGL_NATIVE/
+
 fi
 
 export CFLAGS="-D__ANDROID__"

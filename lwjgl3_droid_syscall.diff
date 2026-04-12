@@ -2,14 +2,12 @@ diff --git a/modules/lwjgl/core/src/templates/kotlin/core/linux/templates/uio.kt
 index 87d339f..19b448d 100644
 --- a/modules/lwjgl/core/src/templates/kotlin/core/linux/templates/uio.kt
 +++ b/modules/lwjgl/core/src/templates/kotlin/core/linux/templates/uio.kt
-@@ -10,6 +10,7 @@ import org.lwjgl.generator.*
- val uio = "UIO".nativeClass(Module.CORE_LINUX, nativeSubPath = "linux") {
+@@ -10,4 +10,5 @@ import org.lwjgl.generator.*
      nativeImport(
          "<sys/uio.h>",
 +        "droid_uio.h",
          "<errno.h>"
      )
-     // TODO:
 diff --git a/modules/lwjgl/core/src/main/c/droid_uio.h b/modules/lwjgl/core/src/main/c/droid_uio.h
 new file mode 100644
 index 0000000..59a2c8a

@@ -53,4 +53,4 @@ LWJGL_BUILD_ARCH=arm32 bash ../ci_build_android.bash
 LWJGL_BUILD_ARCH=x86 bash ../ci_build_android.bash
 LWJGL_BUILD_ARCH=x64 bash ../ci_build_android.bash
 
-ant $ANTFLAGS -Dbuild.offline=true release
+yes | ant $ANTFLAGS -Dbuild.offline=true release

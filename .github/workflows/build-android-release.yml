@@ -56,4 +56,4 @@ jobs:
         tag_name: v${{ matrix.version }}-${{ inputs.version }}
         name: LWJGL3 ${{ matrix.version }} for MojoLauncher
         files: |
-          release_jars/*.jar
+          release_jars/*.jar.*

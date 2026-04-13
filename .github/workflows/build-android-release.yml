@@ -54,6 +54,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         tag_name: v${{ matrix.version }}-${{ inputs.version }}
-        name: LWJGL3 ${{ matrix.version }} for MojoLauncher
+        name: LWJGL ${{ matrix.version }} for MojoLauncher
         files: |
           release_jars/*.jar.*
+          release_jars/hashes.sha1

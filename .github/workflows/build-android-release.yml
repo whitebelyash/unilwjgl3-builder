@@ -17,8 +17,11 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
     - name: Fetch latest LWJGL artifacts
-      uses: dawidd6/action-download-artifact@v7
+      uses: dawidd6/action-download-artifact@v8
       with:
         workflow: build-android.yml
         workflow_conclusion: success

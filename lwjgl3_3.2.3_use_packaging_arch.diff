@@ -1,0 +1,34 @@
+diff --git a/build.xml b/build.xml
+index 8be9c5ebbe..880f6aa18a 100644
+--- a/build.xml
++++ b/build.xml
+@@ -845,16 +845,17 @@
+     </target>
+ 
+     <macrodef name="get-release-offline">
++        <attribute name="platform"/>
+         <attribute name="arch"/>
+         <attribute name="file"/>
+ 
+         <sequential>
+             <local name="available"/>
+-            <available file="${lib.native}/${module.path}/@{file}" property="available"/>
++            <available file="${lib}/native/${platform}/@{arch}/${module.path}/@{file}" property="available"/>
+ 
+-            <echo message="release: ${lib.native}/${module.path}/@{file} is missing" level="warning" unless:set="available"/>
++            <echo message="release: ${lib}/native/@{platform}/@{arch}/${module.path}/@{file} is missing" level="warning" unless:set="available"/>
+             <quiet if:set="available">
+-                <copy file="${lib.native}/${module.path}/@{file}" todir="${release}/${module}/native/${platform}/@{arch}/${module.path}"/>
++                <copy file="${lib}/native/${platform}/@{arch}/${module.path}/@{file}" todir="${release}/${module}/native/@{platform}/@{arch}/${module.path}"/>
+             </quiet>
+         </sequential>
+     </macrodef>
+@@ -874,7 +875,7 @@
+                 usetimestamp="true"
+                 unless:true="${build.offline}"
+             />
+-            <get-release-offline arch="@{arch}" file="@{file}" if:true="${build.offline}"/>
++            <get-release-offline platform="@{platform}" arch="@{arch}" file="@{file}" if:true="${build.offline}"/>
+         </sequential>
+     </macrodef>
+ 

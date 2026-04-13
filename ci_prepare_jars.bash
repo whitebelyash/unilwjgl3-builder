@@ -6,12 +6,12 @@ if [ -z $LWJGL_VERSION ]; then
 fi
 
 TARGET="release_jars"
-RELEASE_DIR="lwjgl3/bin/RELEASE"
+RELEASE_DIR="./lwjgl3/bin/RELEASE"
 
-if [ ! -f "release_jars" ]; then
+if [ ! -d "release_jars" ]; then
 	mkdir -p $TARGET
 fi
-if [ ! -f "$RELEASE_DIR" ]; then
+if [ ! -d "$RELEASE_DIR" ]; then
 	echo "No build files!"
 	exit 1
 fi

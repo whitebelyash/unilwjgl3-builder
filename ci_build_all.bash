@@ -50,6 +50,10 @@ if [[ "$LWJGL_VERSION" == "3.3.1" ]]; then
    apply_patch lwjgl3_3.3.1_uring_type "add missing type into ui_uring.h"
 fi
 
+if [[ "$LWJGL_VERSION" == "3.2.3" || "$LWJGL_VERSION" == "3.3.1" ]]; then
+   apply_patch lwjgl3_3.2.3_use_packaging_arch "fix offline build natives arch"
+fi
+
 export ANTFLAGS="-lib $NASHORN -Dplatform.linux=true -Dbinding.nfd=false -Dbinding.jawt=false -Dbinding.remotery=false -Dbinding.zstd=false -Dbinding.rpmalloc=false -Dbinding.yoga=false -Dbinding.meow=false"
 
 ant $ANTFLAGS compile-templates compile

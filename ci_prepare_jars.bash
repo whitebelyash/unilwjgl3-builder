@@ -22,9 +22,15 @@ install() {
 }
 
 find $RELEASE_DIR -type f -name "*.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar" | while read -r jar; do
-	targetname="$(basename $jar).$LWJGL_VERSION"
+	base=$(basename $jar)
+	targetname="${base%.jar}-${LWJGL_VERSION}.jar"
 	install $jar $targetname
 done
+
+echo "Generating hashes"
+pushd $TARGET
+sha1sum * > hashes.sha1
+popd
 
 echo "Success"
 

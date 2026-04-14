@@ -1,15 +1,16 @@
 diff --git a/modules/lwjgl/rpmalloc/src/main/c/rpmalloc.c b/modules/lwjgl/rpmalloc/src/main/c/rpmalloc.c
-index f0412ce..1690fd9 100644
+index f0412ce..a8698eb 100644
 --- a/modules/lwjgl/rpmalloc/src/main/c/rpmalloc.c
 +++ b/modules/lwjgl/rpmalloc/src/main/c/rpmalloc.c
-@@ -2126,7 +2126,9 @@ _memory_unmap_os(void* address, size_t size, size_t offset, size_t release) {
- 		}
- 	}
- 	else {
--#if defined(POSIX_MADV_FREE)
-+#if defined(MADV_DONTNEED)
-+                if (madvise(address, size, MADV_DONTNEED)) {
-+#elif defined(POSIX_MADV_FREE)
+@@ -2129,7 +2129,11 @@ _memory_unmap_os(void* address, size_t size, size_t offset, size_t release) {
+ #if defined(POSIX_MADV_FREE)
  		if (posix_madvise(address, size, POSIX_MADV_FREE))
  #endif
++#if defined(MADV_DONTNEED)
++		if (madvise(address, size, MADV_DONTNEED)) {
++#else
  		if (posix_madvise(address, size, POSIX_MADV_DONTNEED)) {
++#endif
+ 			assert("Failed to madvise virtual memory block as free" == 0);
+ 		}
+ 	}

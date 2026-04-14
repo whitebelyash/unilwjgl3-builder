@@ -54,6 +54,10 @@ if [[ "$LWJGL_VERSION" == "3.2.3" || "$LWJGL_VERSION" == "3.3.1" ]]; then
    apply_patch lwjgl3_3.2.3_use_packaging_arch "fix offline build natives arch"
 fi
 
+if [[ "$LWJGL_VERSION" == "3.2.3" ]]; then
+   apply_patch lwjgl3_3.2.3_rpmalloc_madvise "use linux madvise instead of posix_madvise when available"
+fi
+
 export ANTFLAGS="-lib $NASHORN -Dplatform.linux=true -Dbinding.nfd=false -Dbinding.jawt=false -Dbinding.remotery=false -Dbinding.zstd=false -Dbinding.yoga=false -Dbinding.meow=false"
 
 ant $ANTFLAGS compile-templates compile

@@ -32,7 +32,7 @@ git clone --depth 1 --branch $LWJGL_VERSION https://github.com/LWJGL/lwjgl3
 cd lwjgl3
 
 apply_patch() {
-   git apply --reject --whitespace=fix ../$1.diff || (echo "git apply failed ($2)" && exit 1)
+   git apply --reject --whitespace=fix --ignore-whitespace ../$1.diff || (echo "git apply failed ($2)" && exit 1)
 }
 
 apply_patch lwjgl3_uni_cflags_ldflags "CFLAGS/LDFLAGS support"

@@ -36,6 +36,7 @@ apply_patch() {
 }
 
 apply_patch lwjgl3_uni_cflags_ldflags "CFLAGS/LDFLAGS support"
+apply_patch lwjgl3_uni_x86_jar "create native JARs for x86"
 
 if [ -f "./modules/lwjgl/core/src/templates/kotlin/core/linux/templates/uio.kt" ]; then
    apply_patch lwjgl3_droid_syscall "UIO system call support"

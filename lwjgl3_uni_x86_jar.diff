@@ -1,0 +1,36 @@
+diff --git a/build.xml b/build.xml
+index fe05c0e..54dfd32 100644
+--- a/build.xml
++++ b/build.xml
+@@ -942,2 +942,3 @@
+         <element name="linux-arm64-content" optional="true"/>
++	<element name="linux-x86-content" optional="true"/>
+         <element name="linux-arm32-content" optional="true"/>
+@@ -968,6 +969,9 @@
+                 <get-release platform="linux" arch="arm64" file="lib@{native-library}.so" if:set="auto-natives"/>
+                 <get-release platform="linux" arch="arm64" file="lib@{native-library}.so.git" if:set="git-revision"/>
+ 
++                <get-release platform="linux" arch="x86" file="lib@{native-library}.so" if:set="auto-natives"/>
++                <get-release platform="linux" arch="x86" file="lib@{native-library}.so.git" if:set="git-revision"/>
++
+                 <get-release platform="linux" arch="arm32" file="lib@{native-library}.so" if:set="auto-natives"/>
+                 <get-release platform="linux" arch="arm32" file="lib@{native-library}.so.git" if:set="git-revision"/>
+ 
+@@ -1025,6 +1029,9 @@
+                 <natives-jar name="@{name}" title="@{title}" platform="linux-arm64" path="linux/arm64" type="so">
+                     <linux-arm64-content/>
+                 </natives-jar>
++                <natives-jar name="@{name}" title="@{title}" platform="linux-x86" path="linux/x86" type="so">
++                    <linux-x86-content/>
++                </natives-jar>
+                 <natives-jar name="@{name}" title="@{title}" platform="linux-arm32" path="linux/arm32" type="so">
+                     <linux-arm32-content/>
+                 </natives-jar>
+@@ -1048,2 +1055,3 @@
+         <element name="linux-arm64" optional="true"/>
++        <element name="linux-x86" optional="true" />
+         <element name="linux-arm32" optional="true"/>
+@@ -1069,2 +1077,3 @@
+                 <linux-arm64-content><linux-arm64/></linux-arm64-content>
++                <linux-x86-content><linux-x86/></linux-x86-content>
+                 <linux-arm32-content><linux-arm32/></linux-arm32-content>

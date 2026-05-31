@@ -36,6 +36,8 @@ apply_patch() {
 }
 
 apply_patch lwjgl3_uni_cflags_ldflags "CFLAGS/LDFLAGS support"
+apply_patch lwjgl3_dont_abort "Don't abort on missing functions"
+apply_patch lwjgl3_dont_check_funcs "Do not check if function is valid"
 
 if [ -f "./modules/lwjgl/core/src/templates/kotlin/core/linux/templates/uio.kt" ]; then
    apply_patch lwjgl3_droid_syscall "UIO system call support"

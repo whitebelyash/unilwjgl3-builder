@@ -1,0 +1,35 @@
+diff --git a/modules/lwjgl/opengl/src/templates/kotlin/opengl/GLBinding.kt b/modules/lwjgl/opengl/src/templates/kotlin/opengl/GLBinding.kt
+index d5d10db..5505b10 100644
+--- a/modules/lwjgl/opengl/src/templates/kotlin/opengl/GLBinding.kt
++++ b/modules/lwjgl/opengl/src/templates/kotlin/opengl/GLBinding.kt
+@@ -172,10 +172,10 @@ val GLBinding = Generator.register(object : APIBinding(
+ 
+         print("\n${t}private static boolean check_${nativeClass.templateName}(FunctionProvider provider, PointerBuffer caps, Set<String> ext")
+         if (hasDeprecated) print(", boolean fc")
+-        print(""") {
+-        if (!ext.contains("$capName")) {
+-            return false;
+-        }""")
++        //print(""") {
++        //if (!ext.contains("$capName")) {
++        //    return false;
++        //}""")
+         val dependencies = nativeClass.functions
+             .filter { it.has<DependsOn>() }
+             .map(::getFunctionDependencyExpression)
+@@ -204,7 +204,7 @@ val GLBinding = Generator.register(object : APIBinding(
+             { it -> (!it.has(DeprecatedGL) || it.has<DependsOn>()) && !it.has(IgnoreMissing) }
+         else
+             { it -> !it.has(IgnoreMissing) })
+-        println(") || reportMissing(\"GL\", \"$capName\");")
++        println(") && ext.contains(\"$capName\") || reportMissing(\"GL\", \"$capName\");")
+         println("$t}")
+     }
+ 
+@@ -389,4 +389,4 @@ fun registryLinkTo(group: String, name: String): String = "${group}_$name".let {
+ 
+ val NativeClass.core: String get() = "{@link ${this.className} OpenGL ${this.className[2]}.${this.className[3]}}"
+ val NativeClass.glx: String get() = "{@link ${this.className} GLX ${this.className[3]}.${this.className[4]}}"
+-val NativeClass.promoted: String get() = "Promoted to core in ${this.core}."
+\ No newline at end of file
++val NativeClass.promoted: String get() = "Promoted to core in ${this.core}."

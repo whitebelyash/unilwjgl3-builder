@@ -39,7 +39,7 @@ apply_patch lwjgl3_uni_cflags_ldflags "CFLAGS/LDFLAGS support"
 apply_patch lwjgl3_uni_x86_jar "create native JARs for x86"
 apply_patch lwjgl3_dont_abort "Don't abort on missing functions"
 
-if [[ "$LWJGL_VERSION" != "3.4.1" || "$LWJGL_VERSION" != "3.2.3"]]; then
+if [[ "$LWJGL_VERSION" != "3.4.1" || "$LWJGL_VERSION" != "3.2.3" ]]; then
    apply_patch lwjgl3.3.6_use_unavail "Use unavailable functions in the current context"
 fi
 

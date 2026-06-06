@@ -10,7 +10,7 @@ index d5d10db..5505b10 100644
 -        if (!ext.contains("$capName")) {
 -            return false;
 -        }""")
-+        //print(""") {
++        print(""") {
 +        //if (!ext.contains("$capName")) {
 +        //    return false;
 +        //}""")

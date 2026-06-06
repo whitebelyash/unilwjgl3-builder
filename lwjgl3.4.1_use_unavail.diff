@@ -10,7 +10,7 @@ index c9912ed..aff8ef0 100644
 -        if (!ext.contains("$capName")) {
 -            return false;
 -        }""")
-+       // print(""") {
++        print(""") {
 +       // if (!ext.contains("$capName")) {
 +       //     return false;
 +       // }""")

@@ -43,7 +43,7 @@ if [[ "$LWJGL_VERSION" == "3.4.1" ]]; then
 	apply_patch lwjgl3.4.1_use_unavail "Use unavailable functions in the current context (3.4.1)"
 fi
 
-if [[ "$LWJGL_VERSION" != "3.4.1" || "$LWJGL_VERSION" != "3.2.3" ]]; then
+if [[ "$LWJGL_VERSION" != "3.4.1" && "$LWJGL_VERSION" != "3.2.3" ]]; then
 	apply_patch lwjgl3.3.6_use_unavail "Use unavailable functions in the current context (3.3.6>)"
 fi
 

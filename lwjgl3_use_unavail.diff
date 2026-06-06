@@ -1,0 +1,35 @@
+diff --git a/modules/lwjgl/opengl/src/templates/kotlin/opengl/GLBinding.kt b/modules/lwjgl/opengl/src/templates/kotlin/opengl/GLBinding.kt
+index c9912ed..aff8ef0 100644
+--- a/modules/lwjgl/opengl/src/templates/kotlin/opengl/GLBinding.kt
++++ b/modules/lwjgl/opengl/src/templates/kotlin/opengl/GLBinding.kt
+@@ -112,10 +112,10 @@ val GLBinding = Generator.register(object : APIBinding(
+ 
+         print("\n${t}private static boolean check_${nativeClass.templateName}(FunctionProvider provider, PointerBuffer caps, Set<String> ext")
+         if (hasDeprecated) print(", boolean fc")
+-        print(""") {
+-        if (!ext.contains("$capName")) {
+-            return false;
+-        }""")
++       // print(""") {
++       // if (!ext.contains("$capName")) {
++       //     return false;
++       // }""")
+         val dependencies = nativeClass.functions
+             .filter { it.has<DependsOn>() }
+             .map(::getFunctionDependencyExpression)
+@@ -144,7 +144,7 @@ val GLBinding = Generator.register(object : APIBinding(
+             { it -> (!it.has(DeprecatedGL) || it.has<DependsOn>()) && !it.has(IgnoreMissing) }
+         else
+             { it -> !it.has(IgnoreMissing) })
+-        println(") || reportMissing(\"GL\", \"$capName\");")
++        println(") && ext.contains(\"$capName\") || reportMissing(\"GL\", \"$capName\");")
+         println("$t}")
+     }
+ 
+@@ -311,4 +311,4 @@ fun String.nativeClassGL(
+             nativeImport("opengl.h")
+         }
+     }
+-)
+\ No newline at end of file
++)

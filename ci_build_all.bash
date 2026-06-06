@@ -40,7 +40,7 @@ apply_patch lwjgl3_uni_x86_jar "create native JARs for x86"
 apply_patch lwjgl3_dont_abort "Don't abort on missing functions"
 
 if [[ "$LWJGL_VERSION" != "3.2.3" ]]; then
-   apply_patch lwjgl3_dont_check_funcs "Do not check if function is valid"
+   apply_patch lwjgl3_use_unavail "Use unavailable functions in the current context"
 fi
 
 if [ -f "./modules/lwjgl/core/src/templates/kotlin/core/linux/templates/uio.kt" ]; then

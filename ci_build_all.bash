@@ -43,7 +43,7 @@ if [[ "$LWJGL_VERSION" == "3.4.1" ]]; then
 fi
 
 if [[ "$LWJGL_VERSION" != "3.4.1" && "$LWJGL_VERSION" != "3.2.3" ]]; then
-	apply_patch lwjgl3_3.4.1_exclude_gl30_check "Use unavailable functions in the current context (3.3.6>)"
+	apply_patch lwjgl3_3.3.6_exclude_gl30_check "Use unavailable functions in the current context (3.3.6>)"
 fi
 
 if [ -f "./modules/lwjgl/core/src/templates/kotlin/core/linux/templates/uio.kt" ]; then

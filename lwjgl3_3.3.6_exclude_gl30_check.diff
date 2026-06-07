@@ -29,10 +29,3 @@ index d5d10db..11efcdc 100644
          println("$t}")
      }
  
-@@ -389,4 +395,4 @@ fun registryLinkTo(group: String, name: String): String = "${group}_$name".let {
- 
- val NativeClass.core: String get() = "{@link ${this.className} OpenGL ${this.className[2]}.${this.className[3]}}"
- val NativeClass.glx: String get() = "{@link ${this.className} GLX ${this.className[3]}.${this.className[4]}}"
--val NativeClass.promoted: String get() = "Promoted to core in ${this.core}."
-\ No newline at end of file
-+val NativeClass.promoted: String get() = "Promoted to core in ${this.core}."

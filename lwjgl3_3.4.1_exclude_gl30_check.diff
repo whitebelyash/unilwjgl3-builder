@@ -32,10 +32,3 @@ index c9912ed..e9294f6 100644
          println("$t}")
      }
  
-@@ -311,4 +317,4 @@ fun String.nativeClassGL(
-             nativeImport("opengl.h")
-         }
-     }
--)
-\ No newline at end of file
-+)

@@ -37,13 +37,17 @@ apply_patch() {
 
 apply_patch lwjgl3_uni_cflags_ldflags "CFLAGS/LDFLAGS support"
 apply_patch lwjgl3_uni_x86_jar "create native JARs for x86"
-apply_patch lwjgl3_uni_arm_float_workaround "workaround for MemoryUtil floats and doubles on ARM"
+if [[ "$LWJGL_VERSION" == "3.4.2" ]]; then
+	apply_patch lwjgl3_3.4.2_arm_float_workaround "workaround for MemoryUtil floats and doubles on ARM (3.4.2)"
+else
+	apply_patch lwjgl3_uni_arm_float_workaround "workaround for MemoryUtil floats and doubles on ARM"
+fi
 
-if [[ "$LWJGL_VERSION" == "3.4.1" ]]; then
+if [[ "$LWJGL_VERSION" == "3.4.?" ]]; then
 	apply_patch lwjgl3_3.4.1_exclude_gl30_check "Use unavailable functions in the current context (3.4.1)"
 fi
 
-if [[ "$LWJGL_VERSION" != "3.4.1" && "$LWJGL_VERSION" != "3.2.3" ]]; then
+if [[ "$LWJGL_VERSION" != "3.4.?" && "$LWJGL_VERSION" != "3.2.3" ]]; then
 	apply_patch lwjgl3_3.3.6_exclude_gl30_check "Use unavailable functions in the current context (3.3.6>)"
 fi
 

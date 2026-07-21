@@ -1,0 +1,38 @@
+diff --git a/modules/lwjgl/core/src/main/java/org/lwjgl/system/MemoryBackendUnsafeLegacy.java b/modules/lwjgl/core/src/main/java/org/lwjgl/system/MemoryBackendUnsafeLegacy.java
+index 9a86c66..cc6151c 100644
+--- a/modules/lwjgl/core/src/main/java/org/lwjgl/system/MemoryBackendUnsafeLegacy.java
++++ b/modules/lwjgl/core/src/main/java/org/lwjgl/system/MemoryBackendUnsafeLegacy.java
+@@ -148,10 +148,14 @@ class MemoryBackendUnsafeLegacy implements MemoryBackend {
+ 
+     @Override public final long getLong(byte[] o, long offset)      { return UNSAFE.getLong(o, Unsafe.ARRAY_BYTE_BASE_OFFSET + offset); }
+ 
+-    @Override public final float getFloat(long ptr)                 { return UNSAFE.getFloat(null, ptr); }
++    @Override public final float getFloat(long ptr)                 {
++    if(!UNALIGNED_ACCESS) return Float.intBitsToFloat(UNSAFE.getInt(null, ptr));
++    return UNSAFE.getFloat(null, ptr); }
+     @Override public final float getFloatUnaligned(long ptr)        { return Float.intBitsToFloat(getIntUnaligned(ptr)); }
+ 
+-    @Override public final double getDouble(long ptr)               { return UNSAFE.getDouble(null, ptr); }
++    @Override public final double getDouble(long ptr)               {
++    if(!UNALIGNED_ACCESS) return Double.longBitsToDouble(UNSAFE.getLong(null, ptr));
++    return UNSAFE.getDouble(null, ptr); }
+     @Override public final double getDoubleUnaligned(long ptr)      { return Double.longBitsToDouble(getLongUnaligned(ptr)); }
+ 
+     @Override public long getCLong(long ptr)                        { return UNSAFE.getLong(null, ptr); }
+@@ -200,10 +204,14 @@ class MemoryBackendUnsafeLegacy implements MemoryBackend {
+         }
+     }
+ 
+-    @Override public final void putFloat(long ptr, float value)            { UNSAFE.putFloat(null, ptr, value); }
++    @Override public final void putFloat(long ptr, float value)            {
++    if(!UNALIGNED_ACCESS) UNSAFE.putInt(null, ptr, Float.floatToRawIntBits(value));
++	    else UNSAFE.putFloat(null, ptr, value); }
+     @Override public final void putFloatUnaligned(long ptr, float value)   { putIntUnaligned(ptr, Float.floatToRawIntBits(value)); }
+ 
+-    @Override public final void putDouble(long ptr, double value)          { UNSAFE.putDouble(null, ptr, value); }
++    @Override public final void putDouble(long ptr, double value)          {
++    if(!UNALIGNED_ACCESS) UNSAFE.putDouble(null, ptr, Double.doubleToRawLongBits(value));
++    else UNSAFE.putDouble(null, ptr, value); }
+     @Override public final void putDoubleUnaligned(long ptr, double value) { putLongUnaligned(ptr, Double.doubleToRawLongBits(value)); }
+ 
+     @Override public void putCLong(long ptr, long value)                   { UNSAFE.putLong(null, ptr, value); }

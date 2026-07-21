@@ -31,45 +31,25 @@ popd
 git clone --depth 1 --branch $LWJGL_VERSION https://github.com/LWJGL/lwjgl3
 cd lwjgl3
 
+echo "Applying patches for LWJGL $LWJGL_VERSION"
 apply_patch() {
-   git apply --reject --whitespace=fix --ignore-whitespace ../$1.diff || (echo "git apply failed ($2)" && exit 1)
+	echo "Applying patch $1"
+   	git apply --reject --whitespace=fix --ignore-whitespace $1 || (echo "git apply failed ($1)" && exit 1)
 }
 
-apply_patch lwjgl3_uni_cflags_ldflags "CFLAGS/LDFLAGS support"
-apply_patch lwjgl3_uni_x86_jar "create native JARs for x86"
-if [[ "$LWJGL_VERSION" == "3.4.2" ]]; then
-	apply_patch lwjgl3_3.4.2_arm_float_workaround "workaround for MemoryUtil floats and doubles on ARM (3.4.2)"
-else
-	apply_patch lwjgl3_uni_arm_float_workaround "workaround for MemoryUtil floats and doubles on ARM"
-fi
+echo "Applying base patches"
+for patch in ../patches/uni/*.diff; do
+	apply_patch $patch
+done
 
-if [[ "$LWJGL_VERSION" == "3.4.?" ]]; then
-	apply_patch lwjgl3_3.4.1_exclude_gl30_check "Use unavailable functions in the current context (3.4.1)"
-fi
+echo "Applying $LWJGL_VERSION patches"
+for patch in ../patches/$LWJGL_VERSION/*.diff; do
+	apply_patch $patch
+done
 
-if [[ "$LWJGL_VERSION" != "3.4.?" && "$LWJGL_VERSION" != "3.2.3" ]]; then
-	apply_patch lwjgl3_3.3.6_exclude_gl30_check "Use unavailable functions in the current context (3.3.6>)"
-fi
-
-if [ -f "./modules/lwjgl/core/src/templates/kotlin/core/linux/templates/uio.kt" ]; then
-   apply_patch lwjgl3_droid_syscall "UIO system call support"
-fi
-
+echo "Applying manual/extra patches"
 if [ -f "./modules/lwjgl/core/src/main/c/linux/LinuxLWJGL.h" ]; then
-   apply_patch lwjgl3_remove_x11_hdr "remove unused X11 headers"
-fi
-
-if [[ "$LWJGL_VERSION" == "3.3.1" ]]; then
-   apply_patch lwjgl3_3.3.1_xxhash_static_assert "fix static assert macro in xxHash"
-   apply_patch lwjgl3_3.3.1_uring_type "add missing type into ui_uring.h"
-fi
-
-if [[ "$LWJGL_VERSION" == "3.2.3" || "$LWJGL_VERSION" == "3.3.1" ]]; then
-   apply_patch lwjgl3_3.2.3_use_packaging_arch "fix offline build natives arch"
-fi
-
-if [[ "$LWJGL_VERSION" == "3.2.3" ]]; then
-   apply_patch lwjgl3_3.2.3_rpmalloc_madvise "use linux madvise instead of posix_madvise when available"
+   apply_patch ../patches/manual/lwjgl3_remove_x11_hdr.diff
 fi
 
 export ANTFLAGS="-lib $NASHORN -Dplatform.linux=true -Dbinding.nfd=false -Dbinding.jawt=false -Dbinding.remotery=false -Dbinding.zstd=false -Dbinding.yoga=false -Dbinding.meow=false"

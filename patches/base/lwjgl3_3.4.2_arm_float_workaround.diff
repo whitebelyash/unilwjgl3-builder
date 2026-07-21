@@ -1,38 +1,39 @@
-diff --git a/modules/lwjgl/core/src/main/java/org/lwjgl/system/MemoryBackendUnsafeLegacy.java b/modules/lwjgl/core/src/main/java/org/lwjgl/system/MemoryBackendUnsafeLegacy.java
-index 9a86c66..cc6151c 100644
---- a/modules/lwjgl/core/src/main/java/org/lwjgl/system/MemoryBackendUnsafeLegacy.java
-+++ b/modules/lwjgl/core/src/main/java/org/lwjgl/system/MemoryBackendUnsafeLegacy.java
-@@ -148,10 +148,14 @@ class MemoryBackendUnsafeLegacy implements MemoryBackend {
+diff --git a/modules/lwjgl/core/src/main/java/org/lwjgl/system/MemoryUtil.java b/modules/lwjgl/core/src/main/java/org/lwjgl/system/MemoryUtil.java
+index 2281bfd..0ecbaac 100644
+--- a/modules/lwjgl/core/src/main/java/org/lwjgl/system/MemoryUtil.java
++++ b/modules/lwjgl/core/src/main/java/org/lwjgl/system/MemoryUtil.java
+@@ -61,6 +61,8 @@ public final class MemoryUtil {
+     static final ThreadLocal<char[]> ARRAY_TLC_CHAR = ThreadLocal.withInitial(() -> new char[ARRAY_TLC_SIZE]);
  
-     @Override public final long getLong(byte[] o, long offset)      { return UNSAFE.getLong(o, Unsafe.ARRAY_BYTE_BASE_OFFSET + offset); }
+     static final MemoryBackend BACKEND;
++    // Float accesses on ARM require 4-byte (or 8-byte) alignment, so we need to make some special considerations for this arch to avoid exploding Java.
++    private static final boolean FLOAT_REQUIRES_ALIGNMENT = "arm".equals(System.getProperty("os.arch"));
  
--    @Override public final float getFloat(long ptr)                 { return UNSAFE.getFloat(null, ptr); }
-+    @Override public final float getFloat(long ptr)                 {
-+    if(!UNALIGNED_ACCESS) return Float.intBitsToFloat(UNSAFE.getInt(null, ptr));
-+    return UNSAFE.getFloat(null, ptr); }
-     @Override public final float getFloatUnaligned(long ptr)        { return Float.intBitsToFloat(getIntUnaligned(ptr)); }
+     static final Charset UTF16 = ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN
+         ? StandardCharsets.UTF_16LE
+@@ -2594,10 +2596,10 @@ public final class MemoryUtil {
+     public static long memGetLong(long ptr)                          { return BACKEND.getLong(ptr); }
+     public static long memGetLongUnaligned(long ptr)                 { return BACKEND.getLongUnaligned(ptr); }
  
--    @Override public final double getDouble(long ptr)               { return UNSAFE.getDouble(null, ptr); }
-+    @Override public final double getDouble(long ptr)               {
-+    if(!UNALIGNED_ACCESS) return Double.longBitsToDouble(UNSAFE.getLong(null, ptr));
-+    return UNSAFE.getDouble(null, ptr); }
-     @Override public final double getDoubleUnaligned(long ptr)      { return Double.longBitsToDouble(getLongUnaligned(ptr)); }
+-    public static float memGetFloat(long ptr)                        { return BACKEND.getFloat(ptr); }
++    public static float memGetFloat(long ptr)                        { return FLOAT_REQUIRES_ALIGNMENT ? Float.intBitsToFloat(BACKEND.getInt(ptr)) : BACKEND.getFloat(ptr); }
+     public static float memGetFloatUnaligned(long ptr)               { return BACKEND.getFloatUnaligned(ptr); }
  
-     @Override public long getCLong(long ptr)                        { return UNSAFE.getLong(null, ptr); }
-@@ -200,10 +204,14 @@ class MemoryBackendUnsafeLegacy implements MemoryBackend {
-         }
-     }
+-    public static double memGetDouble(long ptr)                      { return BACKEND.getDouble(ptr); }
++    public static double memGetDouble(long ptr)                      { return FLOAT_REQUIRES_ALIGNMENT ? Double.longBitsToDouble(BACKEND.getInt(ptr)) : BACKEND.getDouble(ptr); }
+     public static double memGetDoubleUnaligned(long ptr)             { return BACKEND.getDoubleUnaligned(ptr); }
  
--    @Override public final void putFloat(long ptr, float value)            { UNSAFE.putFloat(null, ptr, value); }
-+    @Override public final void putFloat(long ptr, float value)            {
-+    if(!UNALIGNED_ACCESS) UNSAFE.putInt(null, ptr, Float.floatToRawIntBits(value));
-+	    else UNSAFE.putFloat(null, ptr, value); }
-     @Override public final void putFloatUnaligned(long ptr, float value)   { putIntUnaligned(ptr, Float.floatToRawIntBits(value)); }
+     public static long memGetCLong(long ptr)                         { return BACKEND.getCLong(ptr); }
+@@ -2622,10 +2624,10 @@ public final class MemoryUtil {
+     public static void memPutLong(long ptr, long value)              { BACKEND.putLong(ptr, value); }
+     public static void memPutLongUnaligned(long ptr, long value)     { BACKEND.putLongUnaligned(ptr, value); }
  
--    @Override public final void putDouble(long ptr, double value)          { UNSAFE.putDouble(null, ptr, value); }
-+    @Override public final void putDouble(long ptr, double value)          {
-+    if(!UNALIGNED_ACCESS) UNSAFE.putDouble(null, ptr, Double.doubleToRawLongBits(value));
-+    else UNSAFE.putDouble(null, ptr, value); }
-     @Override public final void putDoubleUnaligned(long ptr, double value) { putLongUnaligned(ptr, Double.doubleToRawLongBits(value)); }
+-    public static void memPutFloat(long ptr, float value)            { BACKEND.putFloat(ptr, value); }
++    public static void memPutFloat(long ptr, float value)            { if(FLOAT_REQUIRES_ALIGNMENT) BACKEND.putInt(ptr, Float.floatToRawIntBits(value)); else BACKEND.putFloat(ptr, value); }
+     public static void memPutFloatUnaligned(long ptr, float value)   { BACKEND.putFloatUnaligned(ptr, value); }
  
-     @Override public void putCLong(long ptr, long value)                   { UNSAFE.putLong(null, ptr, value); }
+-    public static void memPutDouble(long ptr, double value)          { BACKEND.putDouble(ptr, value); }
++    public static void memPutDouble(long ptr, double value)          { if(FLOAT_REQUIRES_ALIGNMENT) BACKEND.putLong(ptr, Double.doubleToRawLongBits(value)); else BACKEND.putDouble(ptr, value) }
+     public static void memPutDoubleUnaligned(long ptr, double value) { BACKEND.putDoubleUnaligned(ptr, value); }
+ 
+     public static void memPutCLong(long ptr, long value)             { BACKEND.putCLong(ptr, value); }
